@@ -16,8 +16,11 @@ export async function singUp (req, res) {
 
 export async function signIn (req, res) {
 
+    const {email, password} = req.body
+
     try {
-        res.send("Oi")
+        await db.query(`INSERT INTO login (email, password) VALUES ($1, $2)`, [email, password])
+        res.status(201).send("Login realizado com sucesso")
     } catch (err){
         res.status(500).send(err.message)
     }
