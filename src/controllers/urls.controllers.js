@@ -23,3 +23,22 @@ export async function insertShortUrl (req, res,) {
         res.status(500).send(err.message)
     }
 }
+
+export async function getUrlId (req, res,) {
+
+    const {id} = req.params
+
+    try {
+
+        const idUrl = await db.query(`SELECT * FROM encurtar WHERE id=$1`, [id])
+        const idDaUrl = idUrl.rows[0].id
+        const urlOriginal = idUrl.rows[0].urlOriginal
+        const urlEncurtada = idUrl.rows[0].urlEncurtada
+
+        res.status(200).send({idDaUrl, urlOriginal, urlEncurtada})
+
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
+
+}

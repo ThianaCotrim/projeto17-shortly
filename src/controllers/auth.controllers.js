@@ -20,7 +20,7 @@ export async function singUp (req, res) {
     }
 }
 
-export async function signIn (req, res, token) {
+export async function signIn (req, res) {
 
     const {email, password} = req.body
 
