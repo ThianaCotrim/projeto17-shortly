@@ -8,6 +8,10 @@ export async function insertShortUrl (req, res) {
 
     try {
 
+        if (!url) {
+            return res.status(422).send("A URL é obrigatória no corpo da requisição.");
+          }
+
         const shortlyUrl = nanoid()
         const encurtador = await db.query(`INSERT INTO shorts (shortlyUrl, url) VALUES ($1, $2)`, [shortlyUrl, url])
 

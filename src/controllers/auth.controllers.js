@@ -25,11 +25,15 @@ export async function signIn (req, res) {
     const {email, password} = req.body
 
     try {
-        const token = uuid()
-        await db.query(`INSERT INTO tokens (token) VALUES ($1)`, [token])
 
-        await db.query(`INSERT INTO login (email, password) VALUES ($1, $2)`, [email, password])
-        res.status(201).send("Login realizado com sucesso")
+        const id = await db.query(`SELECT * FROM clientes WHERE email=$1`, [email])
+        const idUsuario = id.rows[0].id
+
+        const token = uuid()
+
+        const login = await db.query(`INSERT INTO login (email, password, token, "idUsuario") VALUES ($1, $2, $3, $4)`, [email, password, token, idUsuario])
+        res.status(201).send(login)
+        console.log(login)
     } catch (err){
         res.status(500).send(err.message)
     }
