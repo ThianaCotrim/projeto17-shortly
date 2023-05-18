@@ -42,3 +42,19 @@ export async function getUrlId (req, res,) {
     }
 
 }
+
+export async function getOpenUrl (req, res,) {
+
+    const {shortUrl} = req.params
+
+    try {
+
+        const idUrl = await db.query(`SELECT * FROM encurtar WHERE urlEncurtada=$1`, [shortUrl])
+        const urlEncurtada = idUrl.rows[0].urlEncurtada
+
+        res.redirect(urlEncurtada)
+
+    }catch (err) {
+        res.status(500).send(err.message)
+    }
+}
