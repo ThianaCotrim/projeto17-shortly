@@ -31,10 +31,11 @@ export async function signIn (req, res) {
 
         const token = uuid()
 
-        const login = await db.query(`INSERT INTO login (email, password, token, "idUsuario") VALUES ($1, $2, $3, $4)`, [email, password, token, idUsuario])
-        res.status(201).send(login)
-        console.log(login)
+        await db.query(`INSERT INTO login (email, password, token, "idUsuario") VALUES ($1, $2, $3, $4)`, [email, password, token, idUsuario])
+        res.status(200).send(token)
+        
     } catch (err){
         res.status(500).send(err.message)
     }
+    
 }
