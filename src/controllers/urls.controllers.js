@@ -17,7 +17,7 @@ export async function insertShortUrl (req, res,) {
         const shortlyUrl = nanoid()
         await db.query(`INSERT INTO encurtar ("urlOriginal", "urlEncurtada", "criadorDaUrl") 
         VALUES ($1, $2, $3)`, [url, shortlyUrl, idUser])
-        res.status(201).send(idUser, shortlyUrl)
+        res.sendStatus(201)
 
     } catch (err){
         res.status(500).send(err.message)
