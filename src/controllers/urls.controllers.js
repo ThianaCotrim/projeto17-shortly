@@ -55,7 +55,6 @@ export async function getOpenUrl (req, res,) {
         await db.query(`UPDATE encurtar SET "contagemVisitas" = "contagemVisitas" + 1 WHERE "urlEncurtada" = $1`, [shortUrl])
 
         res.redirect(302, urlEncurtada)
-
     }catch (err) {
         res.status(500).send(err.message)
     }
