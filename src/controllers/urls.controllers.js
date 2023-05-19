@@ -59,3 +59,25 @@ export async function getOpenUrl (req, res,) {
         res.status(500).send(err.message)
     }
 }
+
+export async function deleteUrlId (req, res,) {
+
+    const {id} = req.params
+
+    const { authorization } = req.headers
+    
+    const token = authorization?.replace("Bearer ", "")
+
+    try {
+        const confirmToken = await db.query(`SELECT * FROM login WHERE token=$1`, [token])
+        // const id = confirmToken.rows[0].idUsuario
+        if (!confirmToken) return res.sendStatus(401)
+
+        await db.query(`DELETE FROM encurtar WHERE id=$1`, [id])
+        
+        res.status(200).send("Url excluída")
+    } catch (err){
+        res.status(500).send(err.message)
+    }
+
+}
