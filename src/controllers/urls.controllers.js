@@ -52,6 +52,8 @@ export async function getOpenUrl (req, res,) {
         const idUrl = await db.query(`SELECT * FROM encurtar WHERE "urlEncurtada"=$1`, [shortUrl])
         const urlEncurtada = idUrl.rows[0].urlEncurtada
 
+        await db.query(`UPDATE encurtar SET "contagemVisitas" = "contagemVisitas" + 1 WHERE "urlEncurtada" = $1`, [shortUrl])
+
         res.redirect(200, urlEncurtada)
 
     }catch (err) {
