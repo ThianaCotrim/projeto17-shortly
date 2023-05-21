@@ -22,7 +22,7 @@ export async function getDadosUsuario (req, res,) {
 
             return {
                 id: id.idUsuario,
-                name: name,
+                name: name.name,
                 visitCount: 0,
                 shortenedUrls: todosOsDados
             }
@@ -34,7 +34,6 @@ export async function getDadosUsuario (req, res,) {
         somaVisitas += url.contagemVisitas;
         allDados[0].visitCount = somaVisitas
     });
-    console.log(totalLinks)
 
         res.status(200).send(allDados)
     } catch (err){
