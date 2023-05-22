@@ -5,7 +5,7 @@ export async function getDadosUsuario (req, res,) {
     const { authorization } = req.headers
     const token = authorization?.replace("Bearer ", "")
 
-    const sessao = await db.query(`SELECT * FROM logins WHERE token=$1`, [token])
+    const sessao = await db.query(`SELECT * FROM login WHERE token=$1`, [token])
     if (sessao.rows.length === 0) return res.sendStatus(401)
 
     try {
@@ -17,6 +17,8 @@ export async function getDadosUsuario (req, res,) {
 
         const pegarDados = await db.query(`SELECT id, "urlOriginal", "urlEncurtada", "contagemVisitas" FROM encurtar WHERE "criadorDaUrl"=$1`, [usuarioId])
         const todosOsDados = pegarDados.rows
+        console.log(todosOsDados)
+
         const totalLinks = pegarDados.rowCount
 
         const allDados = nomeUsuario.rows.map(all => {
@@ -39,7 +41,7 @@ export async function getDadosUsuario (req, res,) {
     });
 
     const objeto = {id: confirmToken.rows[0].idUsuario, name: nomeUsuario.rows[0].name, visitCount: somaVisitas, shortenedUrls: todosOsDados}
-    console.log(objeto)
+   
 
         res.status(200).send(objeto)
     } catch (err){
