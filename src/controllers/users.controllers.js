@@ -31,19 +31,15 @@ export async function getDadosUsuario (req, res,) {
                     }
                 })
                 
-                let somaVisitas = 0;
-                allDados[0].shortenedUrls.forEach(url => {
-                somaVisitas += url.contagemVisitas;
-                allDados[0].visitCount = somaVisitas
-            });
+                if (allDados[0].shortenedUrls.length > 0) {
+                    let somaVisitas = 0;
+                    allDados[0].shortenedUrls.forEach(url => {
+                        somaVisitas += url.contagemVisitas;
+                    });
+                    allDados[0].visitCount = somaVisitas;
+                }
 
-            if (allDados[0].shortenedUrls.length > 0) {
-                let somaVisitas = 0;
-                allDados[0].shortenedUrls.forEach(url => {
-                    somaVisitas += url.contagemVisitas;
-                });
-                allDados[0].visitCount = somaVisitas;
-            }
+            
         
 
     const objeto = {
