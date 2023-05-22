@@ -45,9 +45,21 @@ export async function getDadosUsuario (req, res,) {
         allDados[0].visitCount = somaVisitas
     })
 
+    const objeto = {
+        id: confirmToken.rows[0].idUsuario, 
+        name: nomeUsuario.rows[0].name, 
+        visitCount: somaVisitas, 
+        shortenedUrls: todosOsDados.map(item =>({
+            id: item.id,
+            shortUrl: item.urlEncurtada,
+            url: item.urlOriginal,
+            visitCount: item.contagemVisitas
+        }))
+    }
+    console.log(todosOsDados)
    
 
-        res.status(200).send(allDados)
+        res.status(200).send(objeto)
     } catch (err){
         res.status(500).send(err.message)
     }
