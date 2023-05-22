@@ -17,7 +17,10 @@ export async function getDadosUsuario (req, res,) {
 
         const pegarDados = await db.query(`SELECT id, "urlOriginal", "urlEncurtada", "contagemVisitas" FROM encurtar WHERE "criadorDaUrl"=$1`, [usuarioId])
         const todosOsDados = pegarDados.rows
-        console.log(todosOsDados)
+        const id = todosOsDados[0].id
+        const shortUrl = todosOsDados[0].urlEncurtada
+        const url = todosOsDados[0].urlOriginal
+       
 
         const totalLinks = pegarDados.rowCount
 
@@ -40,7 +43,7 @@ export async function getDadosUsuario (req, res,) {
         allDados[0].visitCount = somaVisitas
     });
 
-    const objeto = {id: confirmToken.rows[0].idUsuario, name: nomeUsuario.rows[0].name, visitCount: somaVisitas, shortenedUrls: todosOsDados}
+    const objeto = {id: confirmToken.rows[0].idUsuario, name: nomeUsuario.rows[0].name, visitCount: somaVisitas, shortenedUrls: [{id, shortUrl, url, visitCount:somaVisitas}]}
    
 
         res.status(200).send(objeto)
