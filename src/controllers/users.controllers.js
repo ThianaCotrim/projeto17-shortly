@@ -40,7 +40,7 @@ export async function getDadosUsuario (req, res,) {
                 const objeto = {
                     id: confirmToken.rows[0].idUsuario,
                     name: nomeUsuario.rows[0].name,
-                    visitCount: somaVisitas,
+                    visitCount: somaVisitas,    
                     shortenedUrls: []
                 };
                 
