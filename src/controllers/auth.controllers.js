@@ -1,5 +1,6 @@
 import { db } from "../database/database.connection.js"
 import bcrypt from "bcrypt"
+import dayjs from "dayjs";
 import {v4 as uuid} from "uuid"
 
 
@@ -7,10 +8,16 @@ export async function singUp (req, res) {
 
     const {name, email, password, confirmPassword} = req.body
 
+    if(password !== confirmPassword) return res.status(422).send("As senhas não conferem");
+
+    const emailExistente = await db.query(`SELECT * FROM clientes WHERE email=$1;`, [email])
+    if (emailExistente.rows.length > 0) return res.status(409).send("Email já cadastrado")
+
     try {
+        
         const hash = bcrypt.hashSync(password, 10)
 
-        await db.query(`INSERT INTO clientes (name, email, password, "confirmPassword") VALUES ($1, $2, $3, $4);`,
+        await db.query(`INSERT INTO clientes (name, email, password, "confirmPassword", ) VALUES ($1, $2, $3, $4);`,
         [name, email, hash, confirmPassword])
 
         res.status(201).send("Cliente cadastrado com sucesso no banco de dados")
@@ -23,6 +30,13 @@ export async function singUp (req, res) {
 export async function signIn (req, res) {
 
     const {email, password} = req.body
+
+    const emailExistente = await db.query(`SELECT * FROM clientes WHERE email=$1;`, [email])
+    const senha = emailExistente.rows[0].password
+    if (emailExistente.rows.length === 0) return res.status(401).send("Email ainda não cadastrado")
+
+    const senhaVerificada = bcrypt.compareSync(password, senha)
+    if(!senhaVerificada) return res.status(401).send("Senha não corresponde a este e-mail")
 
     try {
         const id = await db.query(`SELECT * FROM clientes WHERE email=$1`, [email])
