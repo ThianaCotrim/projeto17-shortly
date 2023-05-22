@@ -41,9 +41,9 @@ export async function getDadosUsuario (req, res,) {
 
         let somaVisitas = 0;
         allDados[0].shortenedUrls.forEach(url => {
-        somaVisitas += url.contagemVisitas
+        somaVisitas += url.contagemVisitas;
         allDados[0].visitCount = somaVisitas
-    });
+    })
 
     const objeto = {id: confirmToken.rows[0].idUsuario, name: nomeUsuario.rows[0].name, visitCount: somaVisitas, shortenedUrls: todosOsDados}
    
