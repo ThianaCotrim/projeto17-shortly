@@ -82,7 +82,12 @@ export async function deleteUrlId (req, res,) {
 
         const url = await db.query(`SELECT * FROM encurtar WHERE id=$1`,[id])
         if (url.rows.length === 0) res.sendStatus(404)
-        // if (url.rows[0].criadorDaUrl !== sessao.rows[0].idUsuario) return res.sendStatus(401)
+       
+        const userId = sessao.rows[0].idUsuario
+        const linkOwnerId = url.rows[0].criadorDaUrl
+        if (userId !== linkOwnerId) {
+            return res.sendStatus(401)
+          }
 
         await db.query(`DELETE FROM encurtar WHERE id=$1`, [id])
         
