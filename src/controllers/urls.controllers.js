@@ -77,9 +77,12 @@ export async function deleteUrlId (req, res,) {
     const token = authorization?.replace("Bearer ", "")
 
     try {
-        const confirmToken = await db.query(`SELECT * FROM login WHERE token=$1`, [token])
-        // const id = confirmToken.rows[0].idUsuario
-        if (!confirmToken) return res.sendStatus(401)
+        const sessao = await db.query(`SELECT * FROM login WHERE token=$1`, [token])
+        if (sessao.rows.length === 0) return res.sendStatus(401)
+
+        const url = await db.query(`SELECT * FROM encurtar WHERE id=$1`,[id])
+        if (url.rows.length === 0) res.sendStatus(404)
+        if (url.rows[0].criadorDaUrl !== sessao.rows[0].idUsuario) return res.sendStatus(401)
 
         await db.query(`DELETE FROM encurtar WHERE id=$1`, [id])
         

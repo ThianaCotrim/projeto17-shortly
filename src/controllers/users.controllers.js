@@ -20,15 +20,15 @@ export async function getDadosUsuario (req, res,) {
 
 
         const allDados = nomeUsuario.rows.map(all => {
-                    const id = confirmToken.rows.find(i => i.idUsuario)
-                    const name = nomeUsuario.rows.find(n => n.name)
-                    return {
-                        id: id.idUsuario,
-                        name: name.name,
-                        visitCount: 0,
-                        shortenedUrls: todosOsDados
-                    }
-                })
+            const id = confirmToken.rows.find(i => i.idUsuario);
+            const name = nomeUsuario.rows.find(n => n.name);
+            return {
+                id: id.idUsuario,
+                name: name.name,
+                visitCount: 0,
+                shortenedUrls: [...todosOsDados] 
+            };
+        });
                 
                 let somaVisitas = 0;
                     allDados[0].shortenedUrls.forEach(url => {
