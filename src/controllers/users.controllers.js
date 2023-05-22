@@ -31,32 +31,30 @@ export async function getDadosUsuario (req, res,) {
                     }
                 })
                 
-                if (allDados[0].shortenedUrls.length > 0) {
-                    let somaVisitas = 0;
+                let somaVisitas = 0;
                     allDados[0].shortenedUrls.forEach(url => {
-                        somaVisitas += url.contagemVisitas;
-                    });
-                    allDados[0].visitCount = somaVisitas;
+                    somaVisitas += url.contagemVisitas;
+                    allDados[0].visitCount = somaVisitas
+                });
+
+
+                const objeto = {
+                    id: confirmToken.rows[0].idUsuario,
+                    name: nomeUsuario.rows[0].name,
+                    visitCount: somaVisitas,
+                    shortenedUrls: []
+                };
+                
+                if (todosOsDados.length > 0) {
+                    objeto.shortenedUrls = todosOsDados.map(item => ({
+                        id: item.id,
+                        shortUrl: item.urlEncurtada,
+                        url: item.urlOriginal,
+                        visitCount: item.contagemVisitas
+                    }));
                 }
-
-            
-        
-
-    const objeto = {
-        id: confirmToken.rows[0].idUsuario, 
-        name: nomeUsuario.rows[0].name, 
-        visitCount: somaVisitas, 
-        shortenedUrls: todosOsDados.map(item =>({
-            id: item.id,
-            shortUrl: item.urlEncurtada,
-            url: item.urlOriginal,
-            visitCount: item.contagemVisitas
-        }))
-    }
-    console.log(objeto)
-   
-
-        res.status(200).send(objeto)
+                
+                res.status(200).send(objeto);
 
 //     const confirmToken = await db.query(`SELECT * FROM login WHERE token=$1`, [token])
 //     const usuarioId = confirmToken.rows[0].idUsuario
