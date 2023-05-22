@@ -34,11 +34,13 @@ export async function getUrlId (req, res,) {
     try {
 
         const idUrl = await db.query(`SELECT * FROM encurtar WHERE id=$1`, [id])
-        const idDaUrl = idUrl.rows[0].id
-        const urlOriginal = idUrl.rows[0].urlOriginal
-        const urlEncurtada = idUrl.rows[0].urlEncurtada
+        if (idUrl.rows.length === 0) return res.sendStatus(404)
 
-        res.status(200).send({idDaUrl, urlOriginal, urlEncurtada})
+        const idDaUrl = idUrl.rows[0].id
+        const url = idUrl.rows[0].urlOriginal
+        const shortUrl = idUrl.rows[0].urlEncurtada
+
+        res.status(200).send({id:idDaUrl, shortUrl, url})
 
     } catch (err) {
         res.status(500).send(err.message)
