@@ -45,10 +45,9 @@ export async function getDadosUsuario (req, res,) {
         allDados[0].visitCount = somaVisitas
     })
 
-    const objeto = {id: confirmToken.rows[0].idUsuario, name: nomeUsuario.rows[0].name, visitCount: somaVisitas, shortenedUrls: todosOsDados}
    
 
-        res.status(200).send(objeto)
+        res.status(200).send(allDados)
     } catch (err){
         res.status(500).send(err.message)
     }
