@@ -52,6 +52,9 @@ export async function getOpenUrl (req, res,) {
 
     const {shortUrl} = req.params
 
+    const url = await db.query(`SELECT * FROM encurtar WHERE "urlEncurtada"=$1;`, [shortUrl])
+    if (url.rows.length === 0) return res.sendStatus(404)
+
     try {
 
         const idUrl = await db.query(`SELECT * FROM encurtar WHERE "urlEncurtada"=$1`, [shortUrl])
@@ -80,7 +83,7 @@ export async function deleteUrlId (req, res,) {
 
         await db.query(`DELETE FROM encurtar WHERE id=$1`, [id])
         
-        res.status(200).send("Url excluída")
+        res.status(204).send("Url excluída")
     } catch (err){
         res.status(500).send(err.message)
     }

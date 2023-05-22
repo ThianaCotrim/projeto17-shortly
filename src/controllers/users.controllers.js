@@ -18,7 +18,6 @@ export async function getDadosUsuario (req, res,) {
         const pegarDados = await db.query(`SELECT id, "urlOriginal", "urlEncurtada", "contagemVisitas" FROM encurtar WHERE "criadorDaUrl"=$1`, [usuarioId])
         const todosOsDados = pegarDados.rows
 
-        
 
         const allDados = nomeUsuario.rows.map(all => {
                     const id = confirmToken.rows.find(i => i.idUsuario)
