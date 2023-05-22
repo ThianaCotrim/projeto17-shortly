@@ -9,15 +9,18 @@ export async function insertShortUrl (req, res,) {
     
     const token = authorization?.replace("Bearer ", "")
 
+    const sessao = await db.query(`SELECT * FROM login WHERE token=$1`, [token])
+    if (sessao.rows.length === 0) return res.sendStatus(401)
+
     try {
 
-        const id = await db.query(`SELECT * FROM login WHERE token=$1`, [token])
-        const idUser = id.rows[0].idUsuario
+        const idUser = await db.query(`SELECT * FROM login WHERE token=$1`, [token])
+        const id = idUser.rows[0].idUsuario
         
-        const shortlyUrl = nanoid()
+        const shortUrl = nanoid()
         await db.query(`INSERT INTO encurtar ("urlOriginal", "urlEncurtada", "criadorDaUrl") 
-        VALUES ($1, $2, $3)`, [url, shortlyUrl, idUser])
-        res.status(201).send({idUser, shortlyUrl})
+        VALUES ($1, $2, $3)`, [url, shortUrl, idUser])
+        res.status(201).send({id, shortUrl})
 
     } catch (err){
         res.status(500).send(err.message)

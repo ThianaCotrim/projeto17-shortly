@@ -33,10 +33,10 @@ export async function signIn (req, res) {
     const {email, password} = req.body
 
     const emailExistente = await db.query(`SELECT * FROM clientes WHERE email=$1;`, [email])
-    const senha = emailExistente.rows[0].password
+    const eMail = emailExistente.rows[0].email
     if (emailExistente.rows.length === 0) return res.status(401).send("Email ainda não cadastrado")
 
-    const senhaVerificada = bcrypt.compareSync(password, senha)
+    const senhaVerificada = bcrypt.compareSync(password, eMail)
     if (!senhaVerificada) return res.status(401).send("Senha não corresponde a este e-mail")
 
     try {
