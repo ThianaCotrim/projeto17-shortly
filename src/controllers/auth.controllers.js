@@ -37,7 +37,7 @@ export async function signIn (req, res) {
     if (emailExistente.rows.length === 0) return res.status(401).send("Email ainda não cadastrado")
 
     const senhaVerificada = bcrypt.compareSync(password, senha)
-    if(!senhaVerificada) return res.status(401).send("Senha não corresponde a este e-mail")
+    if (!senhaVerificada) return res.status(401).send("Senha não corresponde a este e-mail")
 
     try {
         const id = await db.query(`SELECT * FROM clientes WHERE email=$1`, [email])
@@ -46,7 +46,7 @@ export async function signIn (req, res) {
         const createdAt = dayjs()
         const token = uuid()
         await db.query(`INSERT INTO login (email, password, token, "idUsuario", "createdAt") VALUES ($1, $2, $3, $4, $5)`, [email, password, token, idUsuario, createdAt])
-        res.status(200).send(token)
+        res.status(200).send({token: token})
         
     } catch (err){
         res.status(500).send(err.message)
