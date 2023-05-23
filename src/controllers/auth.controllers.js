@@ -9,12 +9,10 @@ export async function singUp (req, res) {
     const {name, email, password, confirmPassword} = req.body
 
     if(password !== confirmPassword) return res.status(422).send("As senhas não conferem");
-
     const emailExistente = await db.query(`SELECT * FROM clientes WHERE email=$1;`, [email])
     if (emailExistente.rows.length > 0) return res.status(409).send("Email já cadastrado")
 
     try {
-        
         const hash = bcrypt.hashSync(password, 10)
         const createdAt = dayjs()
 
