@@ -63,7 +63,13 @@ export async function getOpenUrl (req, res,) {
 
         await db.query(`UPDATE encurtar SET "contagemVisitas" = "contagemVisitas" + 1 WHERE "urlEncurtada" = $1`, [shortUrl])
 
-        res.redirect(302, url)
+        const updatedUrl = await db.query(`SELECT "contagemVisitas" FROM encurtar WHERE "urlEncurtada"=$1`, [shortUrl]);
+        const visitCount = updatedUrl.rows[0].contagemVisitas;
+
+        res.redirect(302, url);
+        console.log("Número total de visitas:", visitCount);
+
+      
     }catch (err) {
         res.status(500).send(err.message)
     }
