@@ -52,19 +52,20 @@ export async function getUrlId (req, res,) {
 export async function getOpenUrl (req, res,) {
 
     const { shortUrl } = req.params;
-
-    const url = await db.query(`SELECT * FROM encurtar WHERE "urlEncurtada"=$1;`, [shortUrl]);
-    if (url.rows.length === 0) return res.sendStatus(404);
   
     try {
-      await db.query(`UPDATE encurtar SET "contagemVisitas" = "contagemVisitas" + 1 WHERE "urlEncurtada" = $1`, [shortUrl]);
-  
-      const updatedUrl = await db.query(`SELECT "contagemVisitas", "urlOriginal" FROM encurtar WHERE "urlEncurtada"=$1`, [shortUrl]);
-      const visitCount = updatedUrl.rows[0].contagemVisitas;
-      const originalUrl = updatedUrl.rows[0].urlOriginal;
-  
-      res.redirect(302, originalUrl);
-      console.log("Número total de visitas:", visitCount);
+        const url = await db.query(`SELECT * FROM encurtar WHERE "urlEncurtada"=$1;`, [shortUrl]);
+        if (url.rows.length === 0) return res.sendStatus(404);
+    
+        const originalUrl = url.rows[0].urlOriginal;
+        
+        await db.query(`UPDATE encurtar SET "contagemVisitas" = "contagemVisitas" + 1 WHERE "urlEncurtada" = $1`, [shortUrl]);
+    
+        const updatedUrl = await db.query(`SELECT "contagemVisitas" FROM encurtar WHERE "urlEncurtada"=$1`, [shortUrl]);
+        const visitCount = updatedUrl.rows[0].contagemVisitas;
+    
+        console.log("Número total de visitas:", visitCount);
+        res.redirect(302, originalUrl);
 
       
     }catch (err) {
