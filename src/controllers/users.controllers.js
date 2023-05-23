@@ -17,6 +17,7 @@ export async function getDadosUsuario (req, res,) {
 
         const pegarDados = await db.query(`SELECT id, "urlOriginal", "urlEncurtada", "contagemVisitas" FROM encurtar WHERE "criadorDaUrl"=$1`, [usuarioId])
         const todosOsDados = pegarDados.rows
+     
 
 
         const allDados = nomeUsuario.rows.map(all => {
@@ -32,7 +33,7 @@ export async function getDadosUsuario (req, res,) {
                 
                 let somaVisitas = 0;
                     allDados[0].shortenedUrls.forEach(url => {
-                    somaVisitas += url.contagemVisitas;
+                    somaVisitas += url.contagemVisitas ?? 0
                     allDados[0].visitCount = somaVisitas
                 });
 
@@ -49,9 +50,12 @@ export async function getDadosUsuario (req, res,) {
                         id: item.id,
                         shortUrl: item.urlEncurtada,
                         url: item.urlOriginal,
-                        visitCount: item.contagemVisitas 
+                        visitCount: item.contagemVisitas ?? 0
+                        
                     }));
+                    
                 }
+                console.log(objeto)
                 
                 
                 res.status(200).send(objeto);
