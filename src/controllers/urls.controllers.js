@@ -19,7 +19,7 @@ export async function insertShortUrl (req, res,) {
         
         const shortUrl = nanoid()
         await db.query(`INSERT INTO encurtar ("urlOriginal", "urlEncurtada", "criadorDaUrl") 
-        VALUES ($1, $2, $3)`, [url, shortUrl, idUser])
+        VALUES ($1, $2, $3)`, [url, shortUrl, id])
         res.status(201).send({id, shortUrl})
 
     } catch (err){
@@ -79,9 +79,11 @@ export async function deleteUrlId (req, res,) {
     try {
         const sessao = await db.query(`SELECT * FROM login WHERE token=$1`, [token])
         if (sessao.rows.length === 0) return res.sendStatus(401)
+        
 
         const url = await db.query(`SELECT * FROM encurtar WHERE id=$1`,[id])
         if (url.rows.length === 0) res.sendStatus(404)
+        console.log(url)
 
         const linkCreatorId = url.rows[0].criadorDaUrl
         const sessionUserId = sessao.rows[0].idUsuario; 
