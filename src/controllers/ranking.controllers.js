@@ -27,7 +27,7 @@ export async function ranking (req, res,) {
             id: row.criadorDaUrl,
             name: row.userName,
             linksCount: row.totalLinks,
-            visitCount: visitCount
+            visitCount: visitCount ?? 0
           };
         });
 
