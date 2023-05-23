@@ -58,15 +58,12 @@ export async function getOpenUrl (req, res,) {
         if (url.rows.length === 0) return res.sendStatus(404);
     
         const originalUrl = url.rows[0].urlOriginal;
-        
-        await db.query(`UPDATE encurtar SET "contagemVisitas" = "contagemVisitas" + 1 WHERE "urlEncurtada" = $1`, [shortUrl]);
+        const visitCount = url.rows[0].contagemVisitas + 1;
     
-        const updatedUrl = await db.query(`SELECT "contagemVisitas" FROM encurtar WHERE "urlEncurtada"=$1`, [shortUrl]);
-        const visitCount = updatedUrl.rows[0].contagemVisitas;
+        await db.query(`UPDATE encurtar SET "contagemVisitas" = $1 WHERE "urlEncurtada" = $2`, [visitCount, shortUrl]);
     
         console.log("Número total de visitas:", visitCount);
         res.redirect(302, originalUrl);
-
       
     }catch (err) {
         res.status(500).send(err.message)
