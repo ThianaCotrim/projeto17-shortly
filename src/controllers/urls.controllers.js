@@ -18,9 +18,10 @@ export async function insertShortUrl (req, res,) {
         const id = idUser.rows[0].idUsuario
         
         const shortUrl = nanoid()
-        await db.query(`INSERT INTO encurtar ("urlOriginal", "urlEncurtada", "criadorDaUrl") 
-        VALUES ($1, $2, $3)`, [url, shortUrl, id])
-        res.status(201).send({id, shortUrl})
+
+        const {rows} = await db.query(`INSERT INTO encurtar ("urlOriginal", "urlEncurtada", "criadorDaUrl") 
+        VALUES ($1, $2, $3) RETURNING encurtar.id`, [url, shortUrl, id]) 
+        res.status(201).send({id: rows[0].id, shortUrl})
 
     } catch (err){
         res.status(500).send(err.message)

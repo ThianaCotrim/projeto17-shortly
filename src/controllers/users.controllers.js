@@ -49,9 +49,10 @@ export async function getDadosUsuario (req, res,) {
                         id: item.id,
                         shortUrl: item.urlEncurtada,
                         url: item.urlOriginal,
-                        visitCount: item.contagemVisitas
+                        visitCount: item.contagemVisitas 
                     }));
                 }
+                
                 
                 res.status(200).send(objeto);
     } catch (err){
