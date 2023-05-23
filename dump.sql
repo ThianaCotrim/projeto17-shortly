@@ -128,7 +128,8 @@ ALTER SEQUENCE public.login_id_seq OWNED BY public.login.id;
 
 CREATE TABLE public.tokens (
     id integer NOT NULL,
-    token text
+    token text,
+    "createdAt" timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
